@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.finite.medbook.R
 import com.finite.medbook.data.repository.CountryRepository
+import com.finite.medbook.data.repository.UserRepository
 import com.finite.medbook.databinding.FragmentSignUpBinding
 import com.google.android.material.snackbar.Snackbar
 
@@ -72,105 +73,28 @@ class SignUpFragment : Fragment() {
             binding.confirmPasswordTextInput.clearFocus()
             binding.countryDropdown.clearFocus()
 
-            if (validFields()) {
-                Snackbar.make(
-                    requireView(),
-                    "Sign up successful",
-                    Snackbar.LENGTH_SHORT
-                ).show()
+            val name = binding.nameTextInput.editText?.text.toString().trim()
+            val password = binding.passwordTextInput.editText?.text.toString()
+            val confirmPassword = binding.confirmPasswordTextInput.editText?.text.toString()
+            val country = binding.countryDropdown.text.toString()
+
+            val result = UserRepository().validateRegistration(
+                name, password, confirmPassword, country
+            )
+
+            if (result.isValid) {
+                clearAllErrors()
+                Snackbar.make(requireView(), "Sign up successful", Snackbar.LENGTH_SHORT).show()
             } else {
-                Snackbar.make(
-                    requireView(),
-                    "Sign up failed",
-                    Snackbar.LENGTH_SHORT
-                ).show()
+                result.errors.forEach {
+                    when (it.first) {
+                        "name" -> binding.nameTextInput.error = it.second
+                        "password" -> binding.passwordTextInput.error = it.second
+                        "confirmPassword" -> binding.confirmPasswordTextInput.error = it.second
+                        "country" -> binding.countryMenu.error = it.second
+                    }
+                }
             }
-        }
-    }
-
-    private fun validFields(): Boolean {
-        val name = binding.nameTextInput.editText?.text.toString().trim()
-        val password = binding.passwordTextInput.editText?.text.toString()
-        val confirmPassword = binding.confirmPasswordTextInput.editText?.text.toString()
-        val countryDropDown = binding.countryDropdown.text.toString()
-
-        val nameValid = validName(name)
-        val passwordValid = validPassword(password)
-        val confirmPasswordValid = validConfirmPassword(password, confirmPassword)
-        val countrySelected = isCountrySelected(countryDropDown)
-
-        return nameValid && passwordValid && confirmPasswordValid && countrySelected
-    }
-
-    private fun isCountrySelected(countryDropDown: String): Boolean {
-        return if (countryDropDown.isEmpty()) {
-            binding.countryMenu.error = "Country is required"
-            false
-        } else {
-            binding.countryMenu.error = null
-            binding.countryMenu.isErrorEnabled = false
-            true
-        }
-    }
-
-    private fun validName(name: String): Boolean {
-        return if (name.isEmpty()) {
-            binding.nameTextInput.error = "Name is required"
-            false
-        } else if (name.contains(Regex("[0-9]"))) {
-            binding.nameTextInput.error = "Name cannot contain numbers"
-            false
-        } else {
-            binding.nameTextInput.error = null
-            binding.nameTextInput.isErrorEnabled = false
-            true
-        }
-    }
-
-    private fun validPassword(password: String): Boolean {
-        val passwordPattern =
-            Regex("^(?=.*[0-9])(?=.*[!@#\$%&()\\[\\]])(?=.*[a-z])(?=.*[A-Z]).{8,}$")
-
-        if (password.isEmpty()) {
-            binding.passwordTextInput.error = "Password is required"
-            return false
-        }
-
-        if (!password.matches(passwordPattern)) {
-            if (!password.matches(Regex(".*[0-9].*"))) {
-                binding.passwordTextInput.error = "Password must contain at least one digit"
-            } else if (!password.matches(Regex(".*[!@#\$%&()].*"))) {
-                binding.passwordTextInput.error =
-                    "Password must contain at least one special character"
-            } else if (!password.matches(Regex(".*[a-z].*"))) {
-                binding.passwordTextInput.error =
-                    "Password must contain at least one lowercase letter"
-            } else if (!password.matches(Regex(".*[A-Z].*"))) {
-                binding.passwordTextInput.error =
-                    "Password must contain at least one uppercase letter"
-            } else {
-                binding.passwordTextInput.error = "Password must have at least 8 characters"
-            }
-            return false
-        }
-
-        binding.passwordTextInput.error = null
-        binding.passwordTextInput.isErrorEnabled = false
-        return true
-    }
-
-
-    private fun validConfirmPassword(password: String, confirmPassword: String): Boolean {
-        return if (confirmPassword.isEmpty()) {
-            binding.confirmPasswordTextInput.error = "Confirm password is required"
-            false
-        } else if (confirmPassword != password) {
-            binding.confirmPasswordTextInput.error = "Passwords do not match"
-            false
-        } else {
-            binding.confirmPasswordTextInput.error = null
-            binding.confirmPasswordTextInput.isErrorEnabled = false
-            true
         }
     }
 
