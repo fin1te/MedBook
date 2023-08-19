@@ -72,6 +72,14 @@ class UserRepository(private val context: Context) {
         editor.apply()
     }
 
+    fun saveCurrentUser(username: String) {
+        val sharedPreferences = context.getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+
+        editor.putString("current_user", username)
+        editor.apply()
+    }
+
     private fun validName(name: String): Boolean {
         return if (name.isEmpty()) {
             errors.add(Pair("name", "Name is required"))
@@ -130,6 +138,12 @@ class UserRepository(private val context: Context) {
         } else {
             true
         }
+    }
+
+    fun isUserLoggedIn(context: Context): Boolean {
+        val sharedPreferences = context.getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
+        val currentUser = sharedPreferences.getString("current_user", "")
+        return currentUser != ""
     }
 
 }

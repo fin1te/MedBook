@@ -43,6 +43,10 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
+    fun saveCurrentUser(name: String) {
+        userRepository.saveCurrentUser(name)
+    }
+
     fun checkUserExists(name: String, password: String) : Boolean {
         val validationResult = userRepository.checkUserExists(name, password)
         if(validationResult.isValid) {

@@ -87,6 +87,10 @@ class SignUpViewModel(application: Application) : AndroidViewModel(application) 
         userRepository.saveUserDetails(username, password, country)
     }
 
+    fun isUserLoggedIn(context: Context): Boolean {
+        return userRepository.isUserLoggedIn(context)
+    }
+
     fun clearFocus(binding: FragmentSignUpBinding) {
         binding.nameTextInput.clearFocus()
         binding.passwordTextInput.clearFocus()

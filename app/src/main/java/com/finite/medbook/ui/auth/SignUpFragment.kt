@@ -32,6 +32,12 @@ class SignUpFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val userIsLoggedIn = viewModel.isUserLoggedIn(requireContext())
+
+        if(userIsLoggedIn) {
+            findNavController().navigate(R.id.action_signUpFragment_to_homeFragment)
+        }
+
         clearErrorsOnFocusChange()
 
         viewModel.validationResult.observe(viewLifecycleOwner) { validationResult ->

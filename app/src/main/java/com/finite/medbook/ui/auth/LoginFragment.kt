@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.finite.medbook.R
 import com.finite.medbook.databinding.FragmentLoginBinding
 import com.google.android.material.snackbar.Snackbar
 
@@ -40,6 +41,8 @@ class LoginFragment : Fragment() {
                 )
 
                 if(isValidUser) {
+                    viewModel.saveCurrentUser(binding.nameTextInput.editText?.text.toString().trim())
+                    findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
                     Snackbar.make(requireView(), "Login successful", Snackbar.LENGTH_SHORT).show()
                 }
 
