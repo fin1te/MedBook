@@ -20,7 +20,7 @@
         <ImageView
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:contentDescription="medbookLogo"
+            android:contentDescription="@string/medbooklogo"
             android:src="@drawable/logo_medbook" />
 
         <TextView
@@ -49,7 +49,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="15dp"
             android:layout_marginVertical="3dp"
-            android:hint="Name"
+            android:hint="@string/name"
             app:startIconDrawable="@drawable/ic_name_24">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -65,7 +65,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="15dp"
             android:layout_marginVertical="3dp"
-            android:hint="Password"
+            android:hint="@string/password"
             app:passwordToggleEnabled="true"
             app:startIconDrawable="@drawable/ic_password_24">
 
@@ -82,7 +82,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="15dp"
             android:layout_marginVertical="3dp"
-            android:hint="Confirm Password"
+            android:hint="@string/confirm_password"
             app:passwordToggleEnabled="true"
             app:startIconDrawable="@drawable/ic_password_24">
 
@@ -100,7 +100,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="15dp"
             android:layout_marginVertical="3dp"
-            android:hint="Country"
+            android:hint="@string/country"
             app:startIconDrawable="@drawable/ic_flag_24">
 
             <AutoCompleteTextView
@@ -118,7 +118,7 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginHorizontal="15dp"
             android:layout_marginTop="10dp"
-            android:text="Register Account" />
+            android:text="@string/register_account" />
     </LinearLayout>
 
     <LinearLayout
@@ -135,13 +135,13 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Already have an account?" />
+            android:text="@string/already_have_an_account" />
 
         <TextView
             android:id="@+id/goToLoginButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="  Login"
+            android:text="@string/login"
             android:textColor="?attr/colorPrimary"
             android:textStyle="bold" />
 

@@ -18,13 +18,16 @@ class SignUpViewModel(application: Application) : AndroidViewModel(application) 
 
     private val userRepository = UserRepository(application.applicationContext)
 
+    // LiveData to hold the validation result of registration
     private val _validationResult = MutableLiveData<ValidationResult>()
     val validationResult: LiveData<ValidationResult> = _validationResult
 
+    // Clear the validation result LiveData
     fun clearValidationResult() {
         _validationResult.value = ValidationResult(false, emptyList())
     }
 
+    // Clear error messages for specific fields in the UI
     fun clearErrors(binding: FragmentSignUpBinding, vararg fields: String) {
         fields.forEach {
             when (it) {
@@ -51,6 +54,7 @@ class SignUpViewModel(application: Application) : AndroidViewModel(application) 
         }
     }
 
+    // Validate user inputs and update the LiveData accordingly
     fun validateAndRegister(
         name: String,
         password: String,
@@ -61,6 +65,7 @@ class SignUpViewModel(application: Application) : AndroidViewModel(application) 
         _validationResult.value = result
     }
 
+    // Clear all error messages in the UI
     fun clearAllErrors(binding: FragmentSignUpBinding) {
         binding.nameTextInput.error = null
         binding.nameTextInput.isErrorEnabled = false
@@ -72,6 +77,7 @@ class SignUpViewModel(application: Application) : AndroidViewModel(application) 
         binding.countryMenu.isErrorEnabled = false
     }
 
+    // Initialize the country dropdown with available countries
     fun initCountryDropdown(binding: FragmentSignUpBinding, context: Context) {
         val countryList =
             CountryRepository(context).getCountriesFromJson().map { it.value.country }.sorted()
@@ -91,6 +97,7 @@ class SignUpViewModel(application: Application) : AndroidViewModel(application) 
         return userRepository.isUserLoggedIn(context)
     }
 
+    // Clear focus from UI elements
     fun clearFocus(binding: FragmentSignUpBinding) {
         binding.nameTextInput.clearFocus()
         binding.passwordTextInput.clearFocus()
@@ -98,6 +105,7 @@ class SignUpViewModel(application: Application) : AndroidViewModel(application) 
         binding.countryDropdown.clearFocus()
     }
 
+    // Hide the soft keyboard
     fun hideKeyboard(context: Context, view: View) {
         val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(view.windowToken, 0)

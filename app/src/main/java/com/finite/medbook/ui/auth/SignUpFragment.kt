@@ -32,14 +32,19 @@ class SignUpFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // Check if user is already logged in, if yes, navigate to home fragment
         val userIsLoggedIn = viewModel.isUserLoggedIn(requireContext())
 
         if(userIsLoggedIn) {
             findNavController().navigate(R.id.action_signUpFragment_to_homeFragment)
         }
 
+        // Clears errors from text input layout when user clicks on it
         clearErrorsOnFocusChange()
 
+        // Observes validation result and navigates to login fragment if sign up is successful
+        // else if user presses back button, clears validation result
+        // else if validation result is not valid, shows relevant errors
         viewModel.validationResult.observe(viewLifecycleOwner) { validationResult ->
             if (validationResult.isValid) {
                 viewModel.clearAllErrors(binding)
@@ -78,7 +83,7 @@ class SignUpFragment : Fragment() {
                 binding.countryDropdown.text.toString()
             )
         }
-
+        // Navigates to the login fragment
         binding.goToLoginButton.setOnClickListener {
             findNavController().navigate(R.id.action_signUpFragment_to_loginFragment)
             viewModel.clearValidationResult()

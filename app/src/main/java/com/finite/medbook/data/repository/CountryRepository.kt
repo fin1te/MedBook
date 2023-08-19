@@ -7,6 +7,8 @@ import com.google.gson.reflect.TypeToken
 import java.io.InputStreamReader
 
 class CountryRepository(private val context: Context) {
+
+    // get the list of countries from json file
     fun getCountriesFromJson(): Map<String, Country> {
         val inputStream = context.assets.open("countries.json")
         val reader = InputStreamReader(inputStream)

@@ -26,13 +26,15 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // Get the currently logged in user and initialise UI accordingly
         getCurrentUser()
         closeAppOnBackPress()
 
         binding.logoutButton.setOnClickListener {
             val sharedPreferences = requireContext().getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
             sharedPreferences.edit().remove("current_user").apply()
-            Snackbar.make(requireView(), "Logged out successfully", Snackbar.LENGTH_SHORT).show()
+            Snackbar.make(requireView(),
+                getString(R.string.logged_out_successfully), Snackbar.LENGTH_SHORT).show()
             findNavController().popBackStack()
         }
     }

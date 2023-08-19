@@ -15,18 +15,22 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
 
     private val userRepository = UserRepository(application.applicationContext)
 
+    // LiveData to hold the login validation result
     private val _loginResult = MutableLiveData<ValidationResult>()
     val loginResult: LiveData<ValidationResult> = _loginResult
 
+    // Validate user inputs and update LiveData accordingly
     fun validateAndLogin(name: String, password: String) {
         val validationResult = userRepository.validateLogin(name, password)
         _loginResult.value = validationResult
     }
 
+    // Clear the login validation result LiveData
     fun clearValidationResult() {
         _loginResult.value = ValidationResult(false, emptyList())
     }
 
+    // Clear error messages for specific fields in the UI
     fun clearErrors(binding: FragmentLoginBinding, vararg fields: String) {
         fields.forEach {
             when (it) {

@@ -4,4 +4,16 @@
     <string name="welcomeText">Hi %1$s!</string>
     <string name="welcome_to_medbook">Welcome to MedBook!</string>
     <string name="logout">Logout</string>
+    <string name="logged_out_successfully">Logged out successfully</string>
+    <string name="name">Name</string>
+    <string name="password">Password</string>
+    <string name="log_in">Log In</string>
+    <string name="new_user">New User?</string>
+    <string name="register">"  Register"</string>
+    <string name="medbooklogo">medbookLogo</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="country">Country</string>
+    <string name="register_account">Register Account</string>
+    <string name="already_have_an_account">Already have an account?</string>
+    <string name="login">"  Login"</string>
 </resources>

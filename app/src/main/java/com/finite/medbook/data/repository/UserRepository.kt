@@ -14,6 +14,7 @@ class UserRepository(private val context: Context) {
 
     private val errors = mutableListOf<Pair<String, String>>()
 
+    // Checks is the Registration form is valid, if not, returns a list of errors
     fun validateRegistration(
         name: String,
         password: String,
@@ -33,6 +34,7 @@ class UserRepository(private val context: Context) {
         return ValidationResult(errors.isEmpty(), errors)
     }
 
+    // Checks is the Login form is valid, if not, returns a list of errors
     fun validateLogin(name: String, password: String): ValidationResult {
         if(errors.isNotEmpty()) {
             errors.clear()
@@ -44,6 +46,7 @@ class UserRepository(private val context: Context) {
         return ValidationResult(errors.isEmpty(), errors)
     }
 
+    // Checks if the user exists in the database
     fun checkUserExists(name: String, password: String): ValidationResult {
         val sharedPreferences = context.getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
         val userListJson = sharedPreferences.getString("user_list", "[]")
@@ -59,6 +62,7 @@ class UserRepository(private val context: Context) {
         return ValidationResult(false, listOf(Pair("name", "Invalid username or password")))
     }
 
+    // Saves the user details to the database
     fun saveUserDetails(username: String, password: String, country: String) {
         val sharedPreferences = context.getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
         val userListJson = sharedPreferences.getString("user_list", "[]")
@@ -72,6 +76,7 @@ class UserRepository(private val context: Context) {
         editor.apply()
     }
 
+    // Saves the current user to the database
     fun saveCurrentUser(username: String) {
         val sharedPreferences = context.getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
         val editor = sharedPreferences.edit()
@@ -80,6 +85,7 @@ class UserRepository(private val context: Context) {
         editor.apply()
     }
 
+    // Checks if the name is valid
     private fun validName(name: String): Boolean {
         return if (name.isEmpty()) {
             errors.add(Pair("name", "Name is required"))
@@ -92,6 +98,7 @@ class UserRepository(private val context: Context) {
         }
     }
 
+    // Checks if the password is valid and meets the all requirements
     private fun validPassword(password: String): Boolean {
         val passwordPattern =
             Regex("^(?=.*[0-9])(?=.*[!@#\$%&()\\[\\]])(?=.*[a-z])(?=.*[A-Z]).{8,}$")
@@ -119,6 +126,7 @@ class UserRepository(private val context: Context) {
         return true
     }
 
+    // Checks if the confirm password is valid and matches the password
     private fun validConfirmPassword(password: String, confirmPassword: String): Boolean {
         return if (confirmPassword.isEmpty()) {
             errors.add(Pair("confirmPassword", "Confirm password is required"))
@@ -131,6 +139,7 @@ class UserRepository(private val context: Context) {
         }
     }
 
+    // Checks if the country is selected
     private fun isCountrySelected(country: String): Boolean {
         return if (country.isEmpty()) {
             errors.add(Pair("country", "Country is required"))
@@ -140,6 +149,7 @@ class UserRepository(private val context: Context) {
         }
     }
 
+    // Checks if the user is logged in
     fun isUserLoggedIn(context: Context): Boolean {
         val sharedPreferences = context.getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
         val currentUser = sharedPreferences.getString("current_user", "")

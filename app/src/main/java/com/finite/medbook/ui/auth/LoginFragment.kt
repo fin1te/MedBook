@@ -27,8 +27,12 @@ class LoginFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // Clears errors from text input layout when user clicks on it
         clearErrorsOnFocusChange()
 
+        // Observes login result and navigates to home fragment if login is successful
+        // else if user presses back button, clears validation result
+        // else if validation result is not valid, shows errors
         viewModel.loginResult.observe(viewLifecycleOwner) { validationResult ->
             if (validationResult.isValid) {
                 binding.passwordTextInput.clearFocus()
@@ -67,12 +71,14 @@ class LoginFragment : Fragment() {
             )
         }
 
+        // Navigates to sign up fragment
         binding.goToSignUpButton.setOnClickListener {
             findNavController().popBackStack()
             viewModel.clearValidationResult()
         }
     }
 
+    // Clears errors from text input layout when user clicks on it
     private fun clearErrorsOnFocusChange() {
         binding.nameTextInput.editText?.setOnFocusChangeListener { _, hasFocus ->
             if (hasFocus) {
