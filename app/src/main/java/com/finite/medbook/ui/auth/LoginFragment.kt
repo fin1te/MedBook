@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.finite.medbook.data.repository.UserRepository
 import com.finite.medbook.databinding.FragmentLoginBinding
@@ -13,6 +14,8 @@ import com.google.android.material.snackbar.Snackbar
 class LoginFragment : Fragment() {
 
     private lateinit var binding: FragmentLoginBinding
+    private val viewModel: LoginViewModel by viewModels()
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -24,63 +27,52 @@ class LoginFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.goToSignUpButton.setOnClickListener {
-            findNavController().popBackStack()
-            clearAllErrors()
-        }
+        clearErrorsOnFocusChange()
 
-        binding.nameTextInput.editText?.setOnFocusChangeListener { _, hasFocus ->
-            if (hasFocus) {
-                binding.nameTextInput.error = null
-                binding.nameTextInput.isErrorEnabled = false
-            }
-        }
-
-        binding.passwordTextInput.editText?.setOnFocusChangeListener { _, hasFocus ->
-            if (hasFocus) {
-                binding.passwordTextInput.error = null
-                binding.passwordTextInput.isErrorEnabled = false
+        viewModel.loginResult.observe(viewLifecycleOwner) { loginResult ->
+            if (loginResult.isValid) {
+                binding.passwordTextInput.clearFocus()
+                viewModel.clearAllErrors(binding)
+                viewModel.hideKeyboard(requireContext(),requireView())
+                Snackbar.make(requireView(), "Login successful", Snackbar.LENGTH_SHORT).show()
+            } else if(loginResult.errors.isEmpty()) {
+                viewModel.clearAllErrors(binding)
+            } else {
+                loginResult.errors.forEach {
+                    when (it.first) {
+                        "name" -> binding.nameTextInput.error = it.second
+                        "password" -> binding.passwordTextInput.error = it.second
+                    }
+                }
             }
         }
 
         binding.loginButton.setOnClickListener {
             binding.nameTextInput.clearFocus()
 
-            val name = binding.nameTextInput.editText?.text.toString().trim()
-            val password = binding.passwordTextInput.editText?.text.toString()
+            viewModel.validateAndLogin(
+                binding.nameTextInput.editText?.text.toString().trim(),
+                binding.passwordTextInput.editText?.text.toString()
+            )
+        }
 
-            val result = UserRepository().validateLogin(name, password)
-
-            if(result.isValid) {
-                binding.passwordTextInput.clearFocus()
-                clearAllErrors()
-                hideKeyboard()
-                Snackbar.make(
-                    requireView(),
-                    "Login successful",
-                    Snackbar.LENGTH_SHORT
-                ).show()
-            } else {
-                result.errors.forEach { error ->
-                    when(error.first) {
-                        "name" -> binding.nameTextInput.error = error.second
-                        "password" -> binding.passwordTextInput.error = error.second
-                    }
-                }
-            }
+        binding.goToSignUpButton.setOnClickListener {
+            findNavController().popBackStack()
+            viewModel.clearValidationResult()
         }
     }
 
-    private fun clearAllErrors() {
-        binding.nameTextInput.error = null
-        binding.nameTextInput.isErrorEnabled = false
-        binding.passwordTextInput.error = null
-        binding.passwordTextInput.isErrorEnabled = false
-    }
+    private fun clearErrorsOnFocusChange() {
+        binding.nameTextInput.editText?.setOnFocusChangeListener { _, hasFocus ->
+            if (hasFocus) {
+                viewModel.clearErrors(binding, "name")
+            }
+        }
 
-    private fun hideKeyboard() {
-        val imm =
-            requireActivity().getSystemService(android.content.Context.INPUT_METHOD_SERVICE) as android.view.inputmethod.InputMethodManager
-        imm.hideSoftInputFromWindow(requireView().windowToken, 0)
+        binding.passwordTextInput.editText?.setOnFocusChangeListener { _, hasFocus ->
+            if (hasFocus) {
+                viewModel.clearErrors(binding, "password")
+            }
+        }
     }
 }
