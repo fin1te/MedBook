@@ -1,11 +1,16 @@
 package com.finite.medbook.data.repository
 
+import android.content.Context
+import com.finite.medbook.data.model.User
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+
 data class ValidationResult(
     val isValid: Boolean,
     val errors: List<Pair<String, String>>
 )
 
-class UserRepository {
+class UserRepository(private val context: Context) {
 
     private val errors = mutableListOf<Pair<String, String>>()
 
@@ -37,6 +42,34 @@ class UserRepository {
         validPassword(password)
 
         return ValidationResult(errors.isEmpty(), errors)
+    }
+
+    fun checkUserExists(name: String, password: String): ValidationResult {
+        val sharedPreferences = context.getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
+        val userListJson = sharedPreferences.getString("user_list", "[]")
+        val userListType = object : TypeToken<List<User>>() {}.type
+        val userList = Gson().fromJson<List<User>>(userListJson, userListType).toMutableList()
+
+        for (user in userList) {
+            if (user.name == name && user.password == password) {
+                return ValidationResult(true, emptyList())
+            }
+        }
+
+        return ValidationResult(false, listOf(Pair("name", "Invalid username or password")))
+    }
+
+    fun saveUserDetails(username: String, password: String, country: String) {
+        val sharedPreferences = context.getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
+        val userListJson = sharedPreferences.getString("user_list", "[]")
+        val userListType = object : TypeToken<List<User>>() {}.type
+        val userList = Gson().fromJson<List<User>>(userListJson, userListType).toMutableList()
+
+        userList.add(User(username, password, country))
+
+        val editor = sharedPreferences.edit()
+        editor.putString("user_list", Gson().toJson(userList))
+        editor.apply()
     }
 
     private fun validName(name: String): Boolean {

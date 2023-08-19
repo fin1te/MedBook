@@ -1,18 +1,19 @@
 package com.finite.medbook.ui.auth
 
+import android.app.Application
 import android.content.Context
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import com.finite.medbook.data.repository.UserRepository
 import com.finite.medbook.data.repository.ValidationResult
 import com.finite.medbook.databinding.FragmentLoginBinding
 
-class LoginViewModel : ViewModel() {
+class LoginViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val userRepository = UserRepository()
+    private val userRepository = UserRepository(application.applicationContext)
 
     private val _loginResult = MutableLiveData<ValidationResult>()
     val loginResult: LiveData<ValidationResult> = _loginResult
@@ -33,11 +34,22 @@ class LoginViewModel : ViewModel() {
                     binding.nameTextInput.error = null
                     binding.nameTextInput.isErrorEnabled = false
                 }
+
                 "password" -> {
                     binding.passwordTextInput.error = null
                     binding.passwordTextInput.isErrorEnabled = false
                 }
             }
+        }
+    }
+
+    fun checkUserExists(name: String, password: String) : Boolean {
+        val validationResult = userRepository.checkUserExists(name, password)
+        if(validationResult.isValid) {
+            return true
+        } else {
+            _loginResult.value = validationResult
+            return false
         }
     }
 

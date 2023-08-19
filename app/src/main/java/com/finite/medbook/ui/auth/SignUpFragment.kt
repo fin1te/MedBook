@@ -1,16 +1,13 @@
 package com.finite.medbook.ui.auth
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.finite.medbook.R
-import com.finite.medbook.data.repository.CountryRepository
 import com.finite.medbook.databinding.FragmentSignUpBinding
 import com.google.android.material.snackbar.Snackbar
 
@@ -40,8 +37,19 @@ class SignUpFragment : Fragment() {
         viewModel.validationResult.observe(viewLifecycleOwner) { validationResult ->
             if (validationResult.isValid) {
                 viewModel.clearAllErrors(binding)
+
+                viewModel.saveUserDetails(
+                    binding.nameTextInput.editText?.text.toString().trim(),
+                    binding.passwordTextInput.editText?.text.toString(),
+                    binding.countryDropdown.text.toString()
+                )
+
                 Snackbar.make(requireView(), "Sign up successful", Snackbar.LENGTH_SHORT).show()
-            } else if(validationResult.errors.isEmpty()) {
+
+                findNavController().navigate(R.id.action_signUpFragment_to_loginFragment)
+                viewModel.clearValidationResult()
+
+            } else if (validationResult.errors.isEmpty()) {
                 viewModel.clearAllErrors(binding)
             } else {
                 validationResult.errors.forEach {

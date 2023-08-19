@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import com.finite.medbook.data.repository.UserRepository
 import com.finite.medbook.databinding.FragmentLoginBinding
 import com.google.android.material.snackbar.Snackbar
 
@@ -29,16 +28,25 @@ class LoginFragment : Fragment() {
 
         clearErrorsOnFocusChange()
 
-        viewModel.loginResult.observe(viewLifecycleOwner) { loginResult ->
-            if (loginResult.isValid) {
+        viewModel.loginResult.observe(viewLifecycleOwner) { validationResult ->
+            if (validationResult.isValid) {
                 binding.passwordTextInput.clearFocus()
                 viewModel.clearAllErrors(binding)
-                viewModel.hideKeyboard(requireContext(),requireView())
-                Snackbar.make(requireView(), "Login successful", Snackbar.LENGTH_SHORT).show()
-            } else if(loginResult.errors.isEmpty()) {
+                viewModel.hideKeyboard(requireContext(), requireView())
+
+                val isValidUser = viewModel.checkUserExists(
+                    binding.nameTextInput.editText?.text.toString().trim(),
+                    binding.passwordTextInput.editText?.text.toString()
+                )
+
+                if(isValidUser) {
+                    Snackbar.make(requireView(), "Login successful", Snackbar.LENGTH_SHORT).show()
+                }
+
+            } else if (validationResult.errors.isEmpty()) {
                 viewModel.clearAllErrors(binding)
             } else {
-                loginResult.errors.forEach {
+                validationResult.errors.forEach {
                     when (it.first) {
                         "name" -> binding.nameTextInput.error = it.second
                         "password" -> binding.passwordTextInput.error = it.second
