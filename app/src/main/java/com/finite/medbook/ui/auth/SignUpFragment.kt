@@ -36,7 +36,7 @@ class SignUpFragment : Fragment() {
         val userIsLoggedIn = viewModel.isUserLoggedIn(requireContext())
 
         if(userIsLoggedIn) {
-            findNavController().navigate(R.id.action_signUpFragment_to_homeFragment)
+            findNavController().navigate(R.id.action_signUpFragment_to_bookFragment)
         }
 
         // Clears errors from text input layout when user clicks on it

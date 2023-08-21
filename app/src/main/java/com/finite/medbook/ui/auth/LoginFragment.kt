@@ -46,7 +46,7 @@ class LoginFragment : Fragment() {
 
                 if(isValidUser) {
                     viewModel.saveCurrentUser(binding.nameTextInput.editText?.text.toString().trim())
-                    findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
+                    findNavController().navigate(R.id.action_loginFragment_to_bookFragment)
                     Snackbar.make(requireView(), "Login successful", Snackbar.LENGTH_SHORT).show()
                 }
 

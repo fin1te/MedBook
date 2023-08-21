@@ -16,4 +16,16 @@
     <string name="register_account">Register Account</string>
     <string name="already_have_an_account">Already have an account?</string>
     <string name="login">"  Login"</string>
+    <string name="sort_options">Sort Options</string>
+    <string-array name="sort_options_array">
+        <item>Title (a-z)</item>
+        <item>Title (z-a)</item>
+        <item>Hits (highest)</item>
+        <item>Hits (lowest)</item>
+    </string-array>
+    <string name="sort_title_a_z">Title (a-z)</string>
+    <string name="sort_title_z_a">Title (z-a)</string>
+    <string name="sort_hits_highest">Hits (highest)</string>
+    <string name="sort_hits_lowest">Hits (lowest)</string>
+    <string name="book_description">In the mystical town of Serenity Falls, a diverse group of adventurers embarks on a quest to recover the fabled \"Starfire Amulet.\" Said to hold ancient powers and hidden truths, the amulet\'s retrieval is vital to restoring balance in the realm. Our heroes include Scarlet, a fearless rogue; Leo, a wise wizard; Willow, a nature-loving druid; and Jasper, a quirky inventor. As they journey through enchanted forests and decode cryptic riddles, they must confront fears and forge bonds. But a dark force also seeks the amulet. In a race against time, they must summon courage and magic to save Serenity Falls from impending doom.</string>
 </resources>

@@ -2,6 +2,7 @@
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.kotlinAndroid)
+    id("kotlin-parcelize")
 }
 
 android {
@@ -55,4 +56,5 @@ dependencies {
     implementation("androidx.navigation:navigation-fragment-ktx:$navVersion")
     implementation("androidx.navigation:navigation-ui-ktx:$navVersion")
     implementation("com.airbnb.android:lottie:6.0.1")
+    implementation("com.github.bumptech.glide:glide:4.15.1")
 }

@@ -1,6 +1,7 @@
 package com.finite.medbook.ui.main
 
 import android.os.Bundle
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
@@ -9,6 +10,7 @@ import com.finite.medbook.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 
+    private val viewModel: BookViewModel by viewModels()
     private lateinit var binding: ActivityMainBinding
     private lateinit var navController: NavController
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -85,6 +85,8 @@ class UserRepository(private val context: Context) {
         editor.apply()
     }
 
+
+
     // Checks if the name is valid
     private fun validName(name: String): Boolean {
         return if (name.isEmpty()) {

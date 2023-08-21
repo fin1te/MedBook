@@ -14,8 +14,8 @@
             android:id="@+id/action_signUpFragment_to_loginFragment"
             app:destination="@id/loginFragment" />
         <action
-            android:id="@+id/action_signUpFragment_to_homeFragment"
-            app:destination="@id/homeFragment" />
+            android:id="@+id/action_signUpFragment_to_bookFragment"
+            app:destination="@id/bookFragment" />
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
@@ -23,13 +23,22 @@
         android:label="fragment_login"
         tools:layout="@layout/fragment_login" >
         <action
-            android:id="@+id/action_loginFragment_to_homeFragment"
-            app:destination="@id/homeFragment" />
+            android:id="@+id/action_loginFragment_to_bookFragment"
+            app:destination="@id/bookFragment" />
     </fragment>
     <fragment
-        android:id="@+id/homeFragment"
-        android:name="com.finite.medbook.ui.main.HomeFragment"
-        android:label="fragment_home"
-        tools:layout="@layout/fragment_home" />
+        android:id="@+id/bookFragment"
+        android:name="com.finite.medbook.ui.main.BookFragment"
+        android:label="fragment_book"
+        tools:layout="@layout/fragment_book" >
+        <action
+            android:id="@+id/action_bookFragment_to_bookDetailFragment"
+            app:destination="@id/bookDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/bookDetailFragment"
+        android:name="com.finite.medbook.ui.main.BookDetailFragment"
+        android:label="fragment_book_detail"
+        tools:layout="@layout/fragment_book_detail" />
 
 </navigation>
